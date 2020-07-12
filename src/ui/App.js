@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import FileManager from './utilities/FileManager';
-const remote = window.require('electron').remote;
-const { dialog } = remote;
+import FontTypes from './components/fonts/Types';
+import OpenFolder from '../renderer-process/open-folder';
 
 class App extends Component {
     constructor(props) {
         super(props);
+        OpenFolder.onFolderOpened(this.showFileTree);
     }
 
-    handleOpenFolder = async () => {
-        const directory = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-        console.log('directory', directory);
+    handleOpenFolder = () => {
+        OpenFolder.open()
+    }
 
-        if (directory && directory.filePaths[0]) {
-            const fileManager = new FileManager();
-            const fileTree = fileManager.walkSync(directory.filePaths[0]);
-            console.log('fileTree', fileTree);
-        }
+    showFileTree = (fileTree) => {
+        console.log('fileTree', fileTree);
     }
 
     render() {
@@ -35,6 +32,8 @@ class App extends Component {
                         rel="noopener noreferrer">
                         Learn React
                     </a>
+
+                    <FontTypes />
 
                     <button onClick={this.handleOpenFolder}>Open Folder</button>
                 </header>

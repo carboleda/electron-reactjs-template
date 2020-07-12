@@ -1,8 +1,7 @@
-const remote = window ? window.require('electron').remote : {};
-const fs = remote.require('fs');
+const fs = require('fs');
 const path = require('path');
 
-export default class FileManager {
+class FileManager {
     constructor() { }
 
     walkSync(dir) {
@@ -26,3 +25,5 @@ export default class FileManager {
             });
     }
 }
+
+module.exports = FileManager;
