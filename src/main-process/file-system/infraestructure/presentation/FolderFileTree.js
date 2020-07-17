@@ -1,5 +1,5 @@
 const { ipcMain, dialog } = require('electron');
-const FileManager = require('../utilities/FileManager');
+const FileManager = require('../../../utilities/FileManager');
 
 ipcMain.on('open-folder', async (event) => {
     const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });

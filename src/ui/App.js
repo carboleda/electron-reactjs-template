@@ -1,45 +1,61 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Redirect
+} from "react-router-dom";
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
 import './App.css';
-import FontTypes from './components/fonts/Types';
-import OpenFolder from '../renderer-process/open-folder';
+import Login from './routes/Login';
+import Home from './routes/Home';
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        OpenFolder.onFolderOpened(this.showFileTree);
-    }
+function App() {
+    const state = {
+        name: "React",
+        isUserAuthenticated: false
+    };
 
-    handleOpenFolder = () => {
-        OpenFolder.open()
-    }
-
-    showFileTree = (fileTree) => {
-        console.log('fileTree', fileTree);
-    }
-
-    render() {
+    const Copyright = () => {
         return (
-            <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <p>
-                        Edit <code>src/App.js</code> and save to reload.
-                    </p>
-                    <a className="App-link"
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        Learn React
-                    </a>
-
-                    <FontTypes />
-
-                    <button onClick={this.handleOpenFolder}>Open Folder</button>
-                </header>
-            </div>
+            <Typography variant="body2" color="textSecondary" align="center">
+                {'Copyright © '}
+                <Link color="inherit" href="https://carlosarboleda.co/">
+                    carlosarboleda.co
+                </Link>{' '}
+                {new Date().getFullYear()}
+                {'.'}
+            </Typography>
         );
-    }
+    };
+
+    return (
+        <Container component="main" maxWidth="xs">
+            <Router>
+                <Switch>
+                    <Route
+                        exact
+                        path="/"
+                        render={() => {
+                            return (
+                                state.isUserAuthenticated ?
+                                    <Redirect to="/home" /> :
+                                    <Redirect to="/login" />
+                            )
+                        }}
+                    />
+                    <Route exact path="/home" component={Home} />
+                    <Route exact path="/login" component={Login} />
+                </Switch>
+            </Router>
+            <Box mt={8}>
+                <Copyright />
+            </Box>
+        </Container>
+    );
 }
 
 export default App;
