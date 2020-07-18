@@ -1,9 +1,5 @@
 const { ipcRenderer } = window.require('electron');
 
-ipcRenderer
-    .on('authenticate-success', (_, user) => Authentication.notifyAll(user))
-    .on('authenticate-failed', (_) => Authentication.notifyAll(null));
-
 export default class Authentication {
     static callbacks = [];
 
@@ -13,7 +9,6 @@ export default class Authentication {
 
     static async notifyAll(user) {
         const isSuccess = user != null;
-
         Authentication.callbacks.forEach(async ({ onSuccess, onError }) => {
             if (isSuccess) onSuccess(user);
             else onError(user);
@@ -25,3 +20,7 @@ export default class Authentication {
         ipcRenderer.send('authenticate', { username, password });
     }
 }
+
+ipcRenderer
+    .on('authenticate-success', (_, user) => Authentication.notifyAll(user))
+    .on('authenticate-failed', (_) => Authentication.notifyAll(null));

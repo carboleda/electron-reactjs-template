@@ -8,8 +8,8 @@ import { Alert } from '@material-ui/lab';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import useAuthenticate from './hooks/useAuthenticate';
-
+import useAuthenticate from '../../hooks/useAuthenticate';
+import useSession from '../../hooks/useSession';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
     const classes = useStyles();
     const history = useHistory();
+    const { saveSession } = useSession();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -56,12 +57,13 @@ export default function Login() {
             setError(false);
             setEntering(true);
             setIsButtonDisabled(true);
+            saveSession(user);
             setTimeout(() => history.push("/home"), 3000);
         } else if (user && user.id === undefined) {
             setError(true);
             setHelperText('Nombre de usuario o contraseña incorrectos');
         }
-    }, [user, error, history, username, password]);
+    }, [user, error, history, username, password, saveSession]);
 
     const handleKeyPress = e => {
         if (e.keyCode === 13 || e.which === 13) {

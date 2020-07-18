@@ -9,15 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
+import useSession from './hooks/useSession';
 import './App.css';
 import Login from './routes/Login';
 import Home from './routes/Home';
 
 function App() {
-    const state = {
-        name: "React",
-        isUserAuthenticated: false
-    };
+    const { isLogged } = useSession();
 
     const Copyright = () => {
         return (
@@ -41,7 +39,7 @@ function App() {
                         path="/"
                         render={() => {
                             return (
-                                state.isUserAuthenticated ?
+                                isLogged() ?
                                     <Redirect to="/home" /> :
                                     <Redirect to="/login" />
                             )
